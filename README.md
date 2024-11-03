@@ -77,6 +77,9 @@ I report here the results obtained for Vanuatu, Italy, Russia,US and China:
 | Russia       | 42594.00 km |
 | US           | 47836.26 km |
 | China        | 58699.99 km |  
+
+
+
 I didn't know in this case how to count the number of steps.
 For what concerns the second algorithm, the strategy used is much more complex and time consuming. I have done a lot of trials when realizing the EA. I try to report here the flow of tests performed and the different types of algorithms that I have tried. First of all, when first tried to realize it, I had to decide between the three common flows of execution in Genetic Algorithms: Historical, Modern and Hyper-modern. I decided to try all of them but, after some trials, I have noticed that the one that had better results was the modern approach. In the file trials_tsp.ipynb are left the three algorithms and their implementations. Last trials for parameters tuning have been carried only on the Modern flow. In the code I will paste here, there is the reference to a fitness function that, given the type of problem, I simply defined as -tsp_cost (that is the cost for travelling all the edges of the cycle). I report here the code of the evolutionary algorithm: 
 ```python
