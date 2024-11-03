@@ -1,5 +1,6 @@
 # CI2024_lab2
-## Lab 2-> tsp problem
+## Lab 2: the TSP problem
+
 The text for lab 2 required to solve the TSP problem (on 5 different instances) using two algorithms: one fast but approximate and a slower, yet more accurate. Moreover, it was requested to report the final cost and the number of steps (since it's not specified what is the fitness in this context, I counted as 'steps' the number of generations of the EA used as second algorithm). The final version of the code delivered is in the file Lab2.ipynb.  
 For what concerns the fast algorithm, the solution provided is quite simple. First of all, a very simple but effective greedy algorithm is used to find a path from an initial random city. The following step in the path is simply chosen as the closest city from the current one. Then, when the algorithm returns a valid solution, simulated annealing is applied in order to try to reduce the cost. Parameters used in the simulated annealing have been fine-tuned following an 'empirical' strategy: trial and errors until I found some values that seemed to give reasonable results in the 5 instances. Moreover, the tweak function used in the simulated annealing is 2-opt. Also in this case, I tried many different strategies, such as 3-opt, 4-opt and so on... I report the code:
 ```python
@@ -70,6 +71,8 @@ best_solution, best_cost = simulated_annealing(tsp, initial_temp, cooling_rate, 
 ```
 This algorithm has proved to be really fast on all the instances and it is able to provide some good results (anyway, they are far from the optimum for the larger collections of cities).
 I report here the results obtained for Vanuatu, Italy, Russia,US and China:
+
+
 |   Instance   |    Cost     |
 |--------------|-------------|
 | Vanuatu      | 1449.74  km |
@@ -220,7 +223,7 @@ def tournament_selection(population, k=30):
 | China        | 56416.82 km |  
 
 
-As it can be seen, it seems it's not working very well for Chine. I tried to increase the number of generations for that particular instance to 700, it takes much more time obviously, but it decreases to 56416.82 km and it was still improving. I don't know what is the optimum in this case because Wolfram is not able to compute it for such a big instace. Additional note: I could have decreased the number of iterations for smaller instances because I actually know what is the optimum and it is reached in a few number of generations (typically not more than 40). Anyway, I think this is not a general strategy: the algorithm should be done in order to work with whatever instance passed as an input, if the format is choerent. Thus, I decided not to introduce a sort of adaptive stopping criteria. Regarding what I have been able to test, 300 generations makes the algorithm in general slow (it takes time), but it's able to obtain good results, in particular if compared to the optimum that we had available.
+As it can be seen, it seems it's not working very well for China. I tried to increase the number of generations for that particular instance to 700, it takes much more time obviously, but it decreases to 56416.82 km and it was still improving. I don't know what is the optimum in this case because Wolfram is not able to compute it for such a big instace. Additional note: I could have decreased the number of iterations for smaller instances because I actually know what is the optimum and it is reached in a few number of generations (typically not more than 40). Anyway, I think this is not a general strategy: the algorithm should be done in order to work with whatever instance passed as an input, if the format is choerent. Thus, I decided not to introduce a sort of adaptive stopping criteria. Regarding what I have been able to test, 300 generations makes the algorithm in general slow (it takes time), but it's able to obtain good results, in particular if compared to the optimum that we had available.
 
 
 
