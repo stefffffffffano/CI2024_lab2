@@ -76,13 +76,13 @@ I report here the results obtained for Vanuatu, Italy, Russia,US and China:
 | Italy        | 4274.80  km |
 | Russia       | 42594.00 km |
 | US           | 47836.26 km |
-| China        | 61809.99 km |  
+| China        | 58699.99 km |  
 I didn't know in this case how to count the number of steps.
 For what concerns the second algorithm, the strategy used is much more complex and time consuming. I have done a lot of trials when realizing the EA. I try to report here the flow of tests performed and the different types of algorithms that I have tried. First of all, when first tried to realize it, I had to decide between the three common flows of execution in Genetic Algorithms: Historical, Modern and Hyper-modern. I decided to try all of them but, after some trials, I have noticed that the one that had better results was the modern approach. In the file trials_tsp.ipynb are left the three algorithms and their implementations. Last trials for parameters tuning have been carried only on the Modern flow. In the code I will paste here, there is the reference to a fitness function that, given the type of problem, I simply defined as -tsp_cost (that is the cost for travelling all the edges of the cycle). I report here the code of the evolutionary algorithm: 
 ```python
 # Algorithm parameters
 POPULATION_SIZE = 150 
-GENERATIONS = 150 
+GENERATIONS = 300 
 ELITE_SIZE = 20  
 MUTATION_RATE = 0.5
 
@@ -147,7 +147,8 @@ def create_initial_population(total_size,greedy_size,random_size,simulated_annea
     return population
 ```
 At the end, after many trials, the configuration that gave me the best results was: 95% of the population composed of random individuals and, the remaining 5%, fit individuals generated with greedy + simulated annealing.  
-There are two other important details that must be defined when designing an EA: the mutation and the crossover function. For what concerns the mutation, driven by the results obtained in previous trials with the simulated annealing, I decided to use 2-opt, while, for the crossover function, I used the inver Over strategy. Here is the code:
+There are two other important details that must be defined when designing an EA: the mutation and the crossover function. For what concerns the mutation, driven by the results obtained in previous trials with the simulated annealing, I decided to use 2-opt, while, for the crossover function, I used the inver Over strategy. In later trials I also introduced the scramble mutation. At the end I dedcided to leave both of them in the code. I do not see so many differences in the results, in particular because there is some randomness by definition in the way the evolution algorithm proceeds. As a results, some trials highlights better performances for the 2-opt, some others do the opposite and would made me choose the scramble mutation. If you try the code, both of them are working, you can select which one execute by simply changing one line of code regarding the type of mutation called.   
+Here is the code:
 ```python
 def inversion_crossover(parent1, parent2):
     # Determine the size of the parents (excluding the last element)
@@ -184,6 +185,18 @@ def mutate(solution, mutation_rate):
         i, j = sorted(random.sample(range(1, len(solution) - 1), 2))
         solution[i:j] = reversed(solution[i:j])
     return solution
+
+def scramble_mutation(solution, mutation_rate):
+    # Apply mutation based on mutation rate
+    if random.random() < mutation_rate:
+        # Randomly select two indices to define the segment
+        i, j = sorted(random.sample(range(1, len(solution) - 1), 2))  # Exclude the first and last cities to keep the tour valid
+        # Scramble the segment between the two indices
+        scrambled_segment = solution[i:j]
+        random.shuffle(scrambled_segment)
+        # Replace the segment in the solution with the scrambled segment
+        solution[i:j] = scrambled_segment
+    return solution
 ```
 For what concerns the crossover function, I tried many other possibilities: order, partially mapped, cycle and uniform crossover. The code regarding this (less successful) trials is left to 'trials_tsp.ipynb' again. As you may have noticed from the code above, there is another important difference with respect to the traditional inversion crossover: simulated annealing is applied on the child generated from the two selected parents with a (low=5%) probability. This was the change in the code that, towards the end, allowed me to obtain the best results among all trials. The problem related to this strategy is that it slows down a lot the execution time on my computer, that's the reason why I kept a low number of generations, even if I know that the algorithm could benefit from more iterations.  
 The last detail regards parent selection for the offspring: I decided to use tournament selection as suggested by the professor. Also in this case, the parameter (tau) has been fine-tuned based on results observed on different executions. At the end, I kept it equal to 30. Here is the code:
@@ -199,9 +212,10 @@ def tournament_selection(population, k=30):
 |--------------|-------------|
 | Vanuatu      | 1345.54  km |
 | Italy        | 4172.76  km |
-| Russia       | 33483.07 km |
-| US           | 40930.59 km |
-| China        | 60186.71 km |  
+| Russia       | 32984.48 km |
+| US           | 40728.24 km |
+| China        | 56416.82 km |  
+As it can be seen, it seems it's not working very well for Chine. I tried to increase the number of generations for that particular instance to 700, it takes much more time obviously, but it decreases to 56416.82 km and it was still improving. I don't know what is the optimum in this case because Wolfram is not able to compute it for such a big instace. Additional note: I could have decreased the number of iterations for smaller instances because I actually know what is the optimum and it is reached in a few number of generations (typically not more than 40). Anyway, I think this is not a general strategy: the algorithm should be done in order to work with whatever instance passed as an input, if the format is choerent. Thus, I decided not to introduce a sort of adaptive stopping criteria. Regarding what I have been able to test, 300 generations makes the algorithm in general slow (it takes time), but it's able to obtain good results, in particular if compared to the optimum that we had available.
 
 
 
