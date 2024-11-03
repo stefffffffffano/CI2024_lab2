@@ -214,16 +214,17 @@ def tournament_selection(population, k=30):
     return selected[0]
 ```
  Also in this case, as done with all the other numerical parameters, many possible configurations have been tried. Almost all the trials I have done are tracked in the aforementioned file, in order to help myself remembering which ones were working better. Also in this case, I report a table with costs obtained when executing the second algorithm (I avoid reporting the number of generations, since, as it is clear from the code, it is fixed to 150). I have tried to make some parameters adaptive, such as the mutation rate or the number of generations, but this strategy didn't give the results I was hoping for. For example, for what concerns the mutation rate, I tried to change it based on the standard deviation of the fitness inside the population, increasing or decreasing it. Anyway, as I imagined when I designed it, it slowed down the execution without being worth it from the point of view of cost. So, at the end, I didn't insert it in the delivered code.   
-|   Instance   |    Cost     |
-|--------------|-------------|
-| Vanuatu      | 1345.54  km |
-| Italy        | 4172.76  km |
-| Russia       | 32984.48 km |
-| US           | 40728.24 km |
-| China        | 56416.82 km |  
+|   Instance   |    Cost     |    Generations      |
+|--------------|-------------|---------------------|
+| Vanuatu      | 1345.54  km |          0          |
+| Italy        | 4172.76  km |         18          |
+| Russia       | 32984.48 km |         300         |
+| US           | 40728.24 km |         300         |
+| China        | 56416.82 km |         300         |
 
 
-As it can be seen, it seems it's not working very well for China. I tried to increase the number of generations for that particular instance to 700, it takes much more time obviously, but it decreases to 56416.82 km and it was still improving. I don't know what is the optimum in this case because Wolfram is not able to compute it for such a big instace. Additional note: I could have decreased the number of iterations for smaller instances because I actually know what is the optimum and it is reached in a few number of generations (typically not more than 40). Anyway, I think this is not a general strategy: the algorithm should be done in order to work with whatever instance passed as an input, if the format is choerent. Thus, I decided not to introduce a sort of adaptive stopping criteria. Regarding what I have been able to test, 300 generations makes the algorithm in general slow (it takes time), but it's able to obtain good results, in particular if compared to the optimum that we had available.
+As it can be seen, it seems it's not working very well for China. I tried to increase the number of generations for that particular instance to 700, it takes much more time obviously, but it decreases to 56416.82 km and it was still improving. I don't know what is the optimum in this case because Wolfram is not able to compute it for such a big instace. Additional note: I could have decreased the number of iterations for smaller instances because I actually know what is the optimum and it is reached in a few number of generations (typically not more than 40). Anyway, I think this is not a general strategy: the algorithm should be done in order to work with whatever instance passed as an input, if the format is choerent. Thus, I decided not to introduce a sort of adaptive stopping criteria. Regarding what I have been able to test, 300 generations makes the algorithm in general slow (it takes time), but it's able to obtain good results, in particular if compared to the optimum that we had available.  
+For the seek of completeness, given the way the effectiveness of the algorithm is evaluated in this course, I also added it at the end. Number of EA generations is added to the table (I didn't do so many trials, probably better results could have been reached). I didn't reach the optimum for the last 3 tours, it could have been possible by increasing a lot the number of generations but then the algorithm requires a lot of time.
 
 
 
